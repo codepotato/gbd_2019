@@ -32,15 +32,24 @@ var svg_story = d3
 
 // ! Components
 // Bring data in for life expectancy
-var request = new XMLHttpRequest();
-request.open("GET", "./Outputs/le_wsx.json", false);
-request.send(null);
+var le_df = null;
+axios.get('./Outputs/le_wsx.json')
+.then(rsp => {
+  le_df = rsp.data;
+  le_df.sort(function(a,b){
+    return +a.Year - +b.Year;
+  })
+})
+
+// var request = new XMLHttpRequest();
+// request.open("GET", "./Outputs/le_wsx.json", false);
+// request.send(null);
 
 var area_x = "West Sussex";
 
-var le_df = JSON.parse(request.responseText).sort(function (a, b) {
-  return +a.Year - +b.Year;
-}); // parse the fetched json data into a variable and sort from earliest year to latest (d3 has trouble with the line figure later if it isnt sorted).
+// var le_df = JSON.parse(request.responseText).sort(function (a, b) {
+//   return +a.Year - +b.Year;
+// }); // parse the fetched json data into a variable and sort from earliest year to latest (d3 has trouble with the line figure later if it isnt sorted).
 
 // Nest the le_df into sub arrays for each sex
 sex_group_le = d3
